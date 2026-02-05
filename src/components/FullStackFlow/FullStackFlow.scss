@@ -1,0 +1,684 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ===========================================
+// FULL STACK FLOW - MAIN COMPONENT STYLES
+// ===========================================
+
+.fullstack-flow {
+  min-height: 100vh;
+  background-color: $color-background;
+  color: $color-text-primary;
+  padding: $spacing-lg;
+
+  @include respond-to('lg') {
+    padding: $spacing-xl;
+  }
+}
+
+.fullstack-flow__container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+// ===========================================
+// HEADER
+// ===========================================
+
+.fullstack-flow__header {
+  text-align: center;
+  margin-bottom: $spacing-xl;
+}
+
+.fullstack-flow__title {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-sm;
+  @include text-gradient;
+
+  @include respond-to('md') {
+    font-size: $font-size-3xl;
+  }
+}
+
+.fullstack-flow__subtitle {
+  color: $color-text-secondary;
+  font-size: $font-size-base;
+  margin-bottom: $spacing-md;
+}
+
+// ===========================================
+// FLOW DIAGRAM CONTAINER
+// ===========================================
+
+.flow-diagram {
+  position: relative;
+  margin-bottom: $spacing-xl;
+  overflow-x: auto;
+  padding-bottom: $spacing-md;
+  @include custom-scrollbar;
+}
+
+.flow-diagram__nodes {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: $spacing-sm;
+  min-width: max-content;
+  padding: $spacing-md;
+
+  @include mobile-only {
+    flex-direction: column;
+    min-width: auto;
+  }
+}
+
+// ===========================================
+// FLOW NODE
+// ===========================================
+
+.flow-node {
+  position: relative;
+  @include flex-column-center;
+  padding: $spacing-md;
+  min-width: $node-min-width;
+  border-radius: $border-radius-xl;
+  border: $border-width-thick solid $color-border;
+  background-color: transparent;
+  cursor: pointer;
+  @include transition-base;
+
+  &:hover {
+    border-color: $color-border-light;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($color-indigo, 0.3);
+  }
+
+  &--active {
+    border-color: var(--node-color);
+    background-color: var(--node-color-light);
+    box-shadow: $shadow-glow;
+    transform: scale(1.05);
+  }
+
+  &--hidden {
+    opacity: 0.3;
+  }
+
+  @include mobile-only {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+.flow-node__pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: $border-radius-xl;
+  opacity: 0.3;
+  animation: pulse 1s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+.flow-node__dot {
+  width: $node-dot-size;
+  height: $node-dot-size;
+  border-radius: $border-radius-full;
+  margin-bottom: $spacing-sm;
+}
+
+.flow-node__label {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  text-align: center;
+  line-height: 1.2;
+  color: $color-text-primary; // White text for readability
+}
+
+.flow-node__detail {
+  font-size: $font-size-xs;
+  color: $color-text-secondary; // Light gray for detail text
+  margin-top: $spacing-xs;
+}
+
+.flow-node__sublabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary; // Light gray (#9ca3af) for sublabels
+  margin-top: $spacing-xs;
+}
+
+// File chips container
+.flow-node__files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  margin-top: $spacing-sm;
+  justify-content: center;
+  max-width: 140px;
+}
+
+// Individual file chip
+.flow-node__file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  font-size: 9px;
+  font-family: $font-family-mono;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: $border-radius-sm;
+  color: $color-text-secondary;
+  cursor: pointer;
+  @include transition-fast;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+
+  &:hover {
+    background-color: rgba(var(--chip-color), 0.2);
+    border-color: var(--chip-color);
+    color: $color-text-primary;
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($color-indigo, 0.3);
+  }
+}
+
+.flow-node__file-icon {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.flow-node__file-name {
+  @include text-truncate;
+}
+
+// ===========================================
+// FLOW ARROW
+// ===========================================
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  @include transition-base;
+
+  &--hidden {
+    opacity: 0.3;
+  }
+
+  @include mobile-only {
+    transform: rotate(90deg);
+    margin: $spacing-xs 0;
+  }
+}
+
+.flow-arrow__line {
+  width: $arrow-width;
+  height: $arrow-height;
+  background-color: $color-border-light;
+}
+
+.flow-arrow__head {
+  width: 0;
+  height: 0;
+  border-top: $arrow-head-size solid transparent;
+  border-bottom: $arrow-head-size solid transparent;
+  border-left: 6px solid $color-border-light;
+}
+
+// ===========================================
+// DATA FORMAT LABELS
+// ===========================================
+
+.data-format-labels {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: $spacing-sm;
+  min-width: max-content;
+  padding: $spacing-md;
+  margin-top: $spacing-md;
+
+  @include mobile-only {
+    flex-direction: column;
+    min-width: auto;
+    align-items: flex-start;
+  }
+}
+
+.data-format-labels__spacer {
+  min-width: $node-min-width;
+
+  @include mobile-only {
+    display: none;
+  }
+}
+
+.data-format-labels__item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  font-size: $font-size-sm;
+  @include transition-base;
+
+  &--hidden {
+    opacity: 0.3;
+  }
+
+  &--purple { color: $color-purple; }
+  &--pink { color: $color-pink; }
+  &--red { color: $color-rose; }
+  &--yellow { color: $color-yellow; }
+  &--green { color: $color-green; }
+}
+
+.data-format-labels__arrow {
+  @include mobile-only {
+    display: none;
+  }
+}
+
+.data-format-labels__badge {
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-sm;
+
+  &--purple { background-color: rgba($color-purple, 0.2); }
+  &--pink { background-color: rgba($color-pink, 0.2); }
+  &--red { background-color: rgba($color-rose, 0.2); }
+  &--yellow { background-color: rgba($color-yellow, 0.2); }
+  &--green { background-color: rgba($color-green, 0.2); }
+}
+
+// ===========================================
+// CODE PANEL
+// ===========================================
+
+.code-panel {
+  @include glassmorphism-dark;
+  border-radius: $border-radius-xl;
+  overflow: hidden;
+  @include fade-in;
+}
+
+.code-panel__header {
+  padding: $code-panel-padding;
+  border-bottom: $border-width solid $color-border;
+}
+
+.code-panel__title-row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+}
+
+.code-panel__indicator {
+  width: $node-dot-size-lg;
+  height: $node-dot-size-lg;
+  border-radius: $border-radius-full;
+  flex-shrink: 0;
+}
+
+.code-panel__title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+}
+
+.code-panel__sublabel {
+  color: $color-text-secondary;
+}
+
+.code-panel__explanation {
+  margin-top: $spacing-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+.code-panel__body {
+  padding: $code-panel-padding;
+}
+
+.code-panel__pre {
+  background-color: $color-background;
+  border-radius: $border-radius-xl;
+  padding: $code-block-padding;
+  overflow-x: auto;
+  @include custom-scrollbar;
+}
+
+.code-panel__code {
+  font-family: $font-family-mono;
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  white-space: pre;
+  line-height: 1.6;
+}
+
+// ===========================================
+// FLOW LEGEND
+// ===========================================
+
+.flow-legend {
+  margin-top: $spacing-xl;
+  padding: $code-panel-padding;
+  background-color: $color-surface-light;
+  border-radius: $border-radius-xl;
+  border: $border-width solid $color-border;
+}
+
+.flow-legend__title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-md;
+}
+
+.flow-legend__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-md;
+
+  @include respond-to('md') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.flow-legend__item {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+}
+
+.flow-legend__dot {
+  width: $node-dot-size;
+  height: $node-dot-size;
+  border-radius: $border-radius-full;
+  margin-top: $spacing-xs;
+  flex-shrink: 0;
+
+  &--indigo { background-color: $color-indigo; }
+  &--yellow { background-color: $color-yellow; }
+  &--green { background-color: $color-green; }
+}
+
+.flow-legend__content {
+  flex: 1;
+}
+
+.flow-legend__label {
+  font-weight: $font-weight-medium;
+  font-size: $font-size-base;
+
+  &--indigo { color: $color-indigo; }
+  &--yellow { color: $color-yellow; }
+  &--green { color: $color-green; }
+}
+
+.flow-legend__description {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  margin-top: $spacing-xs;
+}
+
+// ===========================================
+// FOOTER
+// ===========================================
+
+.fullstack-flow__footer {
+  margin-top: $spacing-lg;
+  text-align: center;
+  color: $color-text-muted;
+  font-size: $font-size-base;
+}
+
+// ===========================================
+// FILE DETAIL MODAL
+// ===========================================
+
+.file-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z-index-modal;
+  padding: $spacing-md;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.file-modal {
+  background-color: $color-surface;
+  border-radius: $border-radius-xl;
+  border: $border-width solid $color-border;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.file-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: $spacing-lg;
+  border-bottom: $border-width solid $color-border;
+}
+
+.file-modal__header-content {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+}
+
+.file-modal__icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: $border-radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.file-modal__icon {
+  width: 20px;
+  height: 20px;
+  color: $color-text-primary;
+}
+
+.file-modal__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.file-modal__title {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin: 0;
+}
+
+.file-modal__path {
+  font-size: $font-size-sm;
+  font-family: $font-family-mono;
+  color: $color-text-muted;
+}
+
+.file-modal__close {
+  width: 32px;
+  height: 32px;
+  border-radius: $border-radius-md;
+  border: none;
+  background-color: transparent;
+  color: $color-text-secondary;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include transition-fast;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: $color-text-primary;
+  }
+}
+
+.file-modal__body {
+  padding: $spacing-lg;
+  overflow-y: auto;
+}
+
+.file-modal__context {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: $border-radius-md;
+  margin-bottom: $spacing-lg;
+}
+
+.file-modal__context-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: $border-radius-full;
+  flex-shrink: 0;
+}
+
+.file-modal__context-text {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+
+  strong {
+    color: $color-text-primary;
+  }
+}
+
+.file-modal__section {
+  margin-bottom: $spacing-lg;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.file-modal__section-title {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: $spacing-sm;
+}
+
+.file-modal__description {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.file-modal__details {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.file-modal__detail {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-sm;
+}
+
+.file-modal__detail-label {
+  font-size: $font-size-sm;
+  color: $color-text-muted;
+  min-width: 70px;
+}
+
+.file-modal__detail-value {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+
+  &--mono {
+    font-family: $font-family-mono;
+    font-size: $font-size-sm;
+  }
+}
+
+.file-modal__footer {
+  padding: $spacing-md $spacing-lg;
+  border-top: $border-width solid $color-border;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.file-modal__btn {
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  background-color: $color-indigo;
+  border: none;
+  border-radius: $border-radius-md;
+  cursor: pointer;
+  @include transition-fast;
+
+  &:hover {
+    background-color: darken($color-indigo, 10%);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($color-indigo, 0.3);
+  }
+}

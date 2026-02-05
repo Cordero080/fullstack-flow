@@ -1,0 +1,242 @@
+@use 'variables' as *;
+
+// ===========================================
+// RESPONSIVE MIXINS
+// ===========================================
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (min-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (min-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (min-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (min-width: $breakpoint-xl) { @content; }
+  } @else if $breakpoint == '2xl' {
+    @media (min-width: $breakpoint-2xl) { @content; }
+  }
+}
+
+@mixin mobile-only {
+  @media (max-width: #{$breakpoint-md - 1px}) { @content; }
+}
+
+// ===========================================
+// GLASSMORPHISM EFFECT
+// ===========================================
+
+@mixin glassmorphism($bg-opacity: 0.1, $blur: 10px, $border-opacity: 0.1) {
+  background: rgba($color-surface, $bg-opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: $border-width solid rgba(255, 255, 255, $border-opacity);
+}
+
+@mixin glassmorphism-dark($bg-opacity: 0.8, $blur: 12px) {
+  background: rgba($color-surface, $bg-opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: $border-width solid $color-border;
+}
+
+// ===========================================
+// TRANSITIONS
+// ===========================================
+
+@mixin transition-base {
+  transition: all $transition-base;
+}
+
+@mixin transition-fast {
+  transition: all $transition-fast;
+}
+
+@mixin transition-slow {
+  transition: all $transition-slow;
+}
+
+@mixin transition-custom($properties...) {
+  $transitions: ();
+  @each $property in $properties {
+    $transitions: append($transitions, #{$property} $transition-base, comma);
+  }
+  transition: $transitions;
+}
+
+// ===========================================
+// FLEXBOX UTILITIES
+// ===========================================
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-column-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// ===========================================
+// TEXT UTILITIES
+// ===========================================
+
+@mixin text-gradient($start: $gradient-start, $middle: $gradient-middle, $end: $gradient-end) {
+  background: linear-gradient(to right, $start, $middle, $end);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ===========================================
+// BUTTON STYLES
+// ===========================================
+
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: $font-weight-medium;
+  border-radius: $border-radius-lg;
+  cursor: pointer;
+  @include transition-base;
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($color-indigo, 0.3);
+  }
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+@mixin button-primary {
+  @include button-base;
+  background-color: $color-indigo;
+  color: $color-text-primary;
+  border: none;
+  
+  &:hover:not(:disabled) {
+    background-color: darken($color-indigo, 10%);
+  }
+  
+  &:active:not(:disabled) {
+    background-color: darken($color-indigo, 15%);
+  }
+}
+
+// ===========================================
+// CARD/PANEL STYLES
+// ===========================================
+
+@mixin panel-base {
+  background-color: $color-surface;
+  border-radius: $border-radius-xl;
+  border: $border-width solid $color-border;
+  overflow: hidden;
+}
+
+@mixin panel-interactive {
+  @include panel-base;
+  @include transition-base;
+  
+  &:hover {
+    border-color: $color-border-light;
+  }
+}
+
+// ===========================================
+// SCROLLBAR STYLING
+// ===========================================
+
+@mixin custom-scrollbar($width: 8px, $track-color: transparent, $thumb-color: $color-border-light) {
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $width;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+    border-radius: $border-radius-full;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-color;
+    border-radius: $border-radius-full;
+    
+    &:hover {
+      background: lighten($thumb-color, 10%);
+    }
+  }
+}
+
+// ===========================================
+// ANIMATION MIXINS
+// ===========================================
+
+@mixin pulse-animation($color) {
+  animation: pulse-#{$color} 1s ease-out infinite;
+  
+  @keyframes pulse-#{$color} {
+    0% {
+      transform: scale(1);
+      opacity: 0.3;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+}
+
+@mixin fade-in($duration: $transition-base) {
+  animation: fadeIn $duration ease-out forwards;
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// ===========================================
+// PSEUDO ELEMENT HELPERS
+// ===========================================
+
+@mixin pseudo($content: '') {
+  content: $content;
+  position: absolute;
+}
+
+@mixin overlay($bg-color: rgba(0, 0, 0, 0.5)) {
+  @include pseudo;
+  inset: 0;
+  background-color: $bg-color;
+}

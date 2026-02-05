@@ -1,0 +1,72 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ===========================================
+// BUTTON COMPONENT
+// ===========================================
+
+.btn {
+  @include button-base;
+  font-family: $font-family-sans;
+  
+  // Size variants
+  &--small {
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-size-sm;
+  }
+  
+  &--medium {
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-base;
+  }
+  
+  &--large {
+    padding: $spacing-md $spacing-xl;
+    font-size: $font-size-md;
+  }
+  
+  // Style variants
+  &--primary {
+    background-color: $color-indigo;
+    color: $color-text-primary;
+    border: none;
+    
+    &:hover:not(.btn--disabled) {
+      background-color: darken($color-indigo, 10%);
+    }
+    
+    &:active:not(.btn--disabled) {
+      background-color: darken($color-indigo, 15%);
+      transform: scale(0.98);
+    }
+  }
+  
+  &--secondary {
+    background-color: transparent;
+    color: $color-text-primary;
+    border: $border-width-thick solid $color-border-light;
+    
+    &:hover:not(.btn--disabled) {
+      border-color: $color-text-secondary;
+      background-color: rgba($color-text-primary, 0.05);
+    }
+  }
+  
+  &--ghost {
+    background-color: transparent;
+    color: $color-text-secondary;
+    border: none;
+    
+    &:hover:not(.btn--disabled) {
+      color: $color-text-primary;
+      background-color: rgba($color-text-primary, 0.1);
+    }
+  }
+  
+  // Disabled state
+  &--disabled {
+    background-color: darken($color-indigo, 20%);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
