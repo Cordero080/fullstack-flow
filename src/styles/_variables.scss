@@ -60,6 +60,7 @@ $spacing-2xl: 3rem;     // 48px
 
 $font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 $font-family-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Monaco, monospace;
+$font-family-display: 'Orbitron', system-ui, sans-serif;
 
 $font-size-xs: 0.625rem;   // 10px
 $font-size-sm: 0.75rem;    // 12px
@@ -109,11 +110,19 @@ $transition-slow: 500ms ease;
 // BREAKPOINTS
 // ===========================================
 
-$breakpoint-sm: 640px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 1024px;
-$breakpoint-xl: 1280px;
-$breakpoint-2xl: 1536px;
+$breakpoint-xs: 375px;   // Small phones (iPhone SE)
+$breakpoint-sm: 640px;   // Large phones / small tablets
+$breakpoint-md: 768px;   // Tablets
+$breakpoint-lg: 1024px;  // Small laptops
+$breakpoint-xl: 1280px;  // Desktops
+$breakpoint-2xl: 1536px; // Large desktops
+
+// Common device breakpoints
+$breakpoint-iphone-se: 375px;
+$breakpoint-iphone: 390px;
+$breakpoint-iphone-plus: 428px;
+$breakpoint-android: 360px;
+$breakpoint-android-lg: 412px;
 
 // ===========================================
 // Z-INDEX
@@ -130,18 +139,26 @@ $z-index-modal: 1000;
 
 // Flow node
 $node-min-width: 100px;
+$node-min-width-mobile: 85px;
 $node-padding: $spacing-md;
+$node-padding-mobile: $spacing-sm;
 $node-dot-size: 0.75rem;
 $node-dot-size-lg: 1rem;
 
 // Flow arrow
 $arrow-width: 1.5rem;
+$arrow-width-mobile: 1rem;
 $arrow-height: 2px;
 $arrow-head-size: 4px;
 
 // Code panel
 $code-panel-padding: $spacing-lg;
+$code-panel-padding-mobile: $spacing-md;
 $code-block-padding: $spacing-md;
+$code-block-padding-mobile: $spacing-sm;
 
 // Animation
 $animation-step-duration: 800ms;
+
+// Touch targets (minimum 44px for accessibility)
+$touch-target-min: 44px;

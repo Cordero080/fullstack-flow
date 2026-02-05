@@ -7,9 +7,19 @@
 
 .fullstack-flow {
   min-height: 100vh;
+  min-height: 100dvh; // Dynamic viewport height for mobile browsers
   background-color: $color-background;
   color: $color-text-primary;
-  padding: $spacing-lg;
+  padding: $spacing-sm;
+  padding-bottom: calc($spacing-sm + env(safe-area-inset-bottom, 0));
+  
+  @include respond-to('xs') {
+    padding: $spacing-md;
+  }
+
+  @include respond-to('sm') {
+    padding: $spacing-lg;
+  }
 
   @include respond-to('lg') {
     padding: $spacing-xl;
@@ -19,6 +29,7 @@
 .fullstack-flow__container {
   max-width: 1280px;
   margin: 0 auto;
+  width: 100%;
 }
 
 // ===========================================
@@ -27,14 +38,27 @@
 
 .fullstack-flow__header {
   text-align: center;
-  margin-bottom: $spacing-xl;
+  margin-bottom: $spacing-lg;
+  
+  @include respond-to('md') {
+    margin-bottom: $spacing-xl;
+  }
 }
 
 .fullstack-flow__title {
-  font-size: $font-size-2xl;
+  font-family: $font-family-display;
+  font-size: $font-size-xl;
   font-weight: $font-weight-bold;
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-xs;
   @include text-gradient;
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  @include respond-to('xs') {
+    font-size: $font-size-2xl;
+    margin-bottom: $spacing-sm;
+  }
 
   @include respond-to('md') {
     font-size: $font-size-3xl;
@@ -43,8 +67,15 @@
 
 .fullstack-flow__subtitle {
   color: $color-text-secondary;
-  font-size: $font-size-base;
+  font-size: $font-size-sm;
   margin-bottom: $spacing-md;
+  padding: 0 $spacing-sm;
+
+  @include respond-to('sm') {
+    font-size: $font-size-base;
+    margin-bottom: $spacing-md;
+    padding: 0;
+  }
 }
 
 // ===========================================
@@ -53,23 +84,52 @@
 
 .flow-diagram {
   position: relative;
-  margin-bottom: $spacing-xl;
+  margin-bottom: $spacing-lg;
   overflow-x: auto;
-  padding-bottom: $spacing-md;
+  overflow-y: hidden;
+  padding-bottom: $spacing-sm;
+  -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
   @include custom-scrollbar;
+  
+  // Hide scrollbar on mobile for cleaner look
+  @include phone-only {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  
+  @include respond-to('md') {
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-md;
+  }
 }
 
 .flow-diagram__nodes {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: $spacing-sm;
+  gap: $spacing-xs;
   min-width: max-content;
-  padding: $spacing-md;
+  padding: $spacing-sm;
 
-  @include mobile-only {
+  @include phone-only {
     flex-direction: column;
     min-width: auto;
+    gap: $spacing-sm;
+    align-items: stretch;
+    padding: $spacing-xs;
+  }
+  
+  @include respond-to('sm') {
+    gap: $spacing-sm;
+    padding: $spacing-md;
+  }
+  
+  @include respond-to('lg') {
+    justify-content: center;
   }
 }
 
@@ -80,16 +140,29 @@
 .flow-node {
   position: relative;
   @include flex-column-center;
-  padding: $spacing-md;
-  min-width: $node-min-width;
-  border-radius: $border-radius-xl;
+  padding: $spacing-sm;
+  min-width: $node-min-width-mobile;
+  border-radius: $border-radius-lg;
   border: $border-width-thick solid $color-border;
   background-color: transparent;
   cursor: pointer;
   @include transition-base;
+  @include touch-target;
+  
+  // Improve touch experience
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 
-  &:hover {
-    border-color: $color-border-light;
+  @include respond-to('sm') {
+    padding: $spacing-md;
+    min-width: $node-min-width;
+    border-radius: $border-radius-xl;
+  }
+
+  @include hover-device {
+    &:hover {
+      border-color: $color-border-light;
+    }
   }
 
   &:focus {
@@ -101,25 +174,37 @@
     border-color: var(--node-color);
     background-color: var(--node-color-light);
     box-shadow: $shadow-glow;
-    transform: scale(1.05);
+    transform: scale(1.02);
+    
+    @include respond-to('sm') {
+      transform: scale(1.05);
+    }
   }
 
   &--hidden {
     opacity: 0.3;
   }
 
-  @include mobile-only {
+  @include phone-only {
     width: 100%;
-    max-width: 200px;
+    max-width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
   }
 }
 
 .flow-node__pulse {
   position: absolute;
   inset: 0;
-  border-radius: $border-radius-xl;
+  border-radius: $border-radius-lg;
   opacity: 0.3;
   animation: pulse 1s ease-out infinite;
+  
+  @include respond-to('sm') {
+    border-radius: $border-radius-xl;
+  }
 }
 
 @keyframes pulse {
@@ -134,49 +219,105 @@
 }
 
 .flow-node__dot {
-  width: $node-dot-size;
-  height: $node-dot-size;
+  width: 10px;
+  height: 10px;
   border-radius: $border-radius-full;
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-xs;
+  flex-shrink: 0;
+  
+  @include phone-only {
+    margin-bottom: 0;
+    margin-right: $spacing-xs;
+  }
+  
+  @include respond-to('sm') {
+    width: $node-dot-size;
+    height: $node-dot-size;
+    margin-bottom: $spacing-sm;
+  }
+}
+
+.flow-node__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  @include phone-only {
+    align-items: flex-start;
+    flex: 1;
+  }
 }
 
 .flow-node__label {
-  font-size: $font-size-base;
+  font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
   text-align: center;
   line-height: 1.2;
-  color: $color-text-primary; // White text for readability
+  color: $color-text-primary;
+  
+  @include phone-only {
+    text-align: left;
+  }
+  
+  @include respond-to('sm') {
+    font-size: $font-size-base;
+  }
 }
 
 .flow-node__detail {
-  font-size: $font-size-xs;
-  color: $color-text-secondary; // Light gray for detail text
-  margin-top: $spacing-xs;
+  font-size: 9px;
+  color: $color-text-secondary;
+  margin-top: 2px;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-xs;
+    margin-top: $spacing-xs;
+  }
 }
 
 .flow-node__sublabel {
-  font-size: $font-size-sm;
-  color: $color-text-secondary; // Light gray (#9ca3af) for sublabels
-  margin-top: $spacing-xs;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  margin-top: 2px;
+  
+  @include phone-only {
+    text-align: left;
+  }
+  
+  @include respond-to('sm') {
+    font-size: $font-size-sm;
+    margin-top: $spacing-xs;
+  }
 }
 
 // File chips container
 .flow-node__files {
   display: flex;
   flex-wrap: wrap;
-  gap: $spacing-xs;
-  margin-top: $spacing-sm;
+  gap: 2px;
+  margin-top: $spacing-xs;
   justify-content: center;
-  max-width: 140px;
+  max-width: 120px;
+  
+  @include phone-only {
+    justify-content: flex-start;
+    max-width: none;
+  }
+  
+  @include respond-to('sm') {
+    gap: $spacing-xs;
+    margin-top: $spacing-sm;
+    max-width: 140px;
+  }
 }
 
 // Individual file chip
 .flow-node__file-chip {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  padding: 2px 6px;
-  font-size: 9px;
+  gap: 2px;
+  padding: 2px 4px;
+  font-size: 8px;
   font-family: $font-family-mono;
   background-color: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -187,12 +328,31 @@
   white-space: nowrap;
   max-width: 100%;
   overflow: hidden;
+  @include touch-target;
+  
+  // Touch improvements
+  -webkit-tap-highlight-color: transparent;
+  
+  @include respond-to('sm') {
+    gap: 3px;
+    padding: 2px 6px;
+    font-size: 9px;
+  }
 
-  &:hover {
-    background-color: rgba(var(--chip-color), 0.2);
+  @include hover-device {
+    &:hover {
+      background-color: rgba(var(--chip-color), 0.2);
+      border-color: var(--chip-color);
+      color: $color-text-primary;
+      transform: translateY(-1px);
+    }
+  }
+  
+  // Active state for touch
+  &:active {
+    background-color: rgba(var(--chip-color), 0.3);
     border-color: var(--chip-color);
     color: $color-text-primary;
-    transform: translateY(-1px);
   }
 
   &:focus {
@@ -220,21 +380,27 @@
   display: flex;
   align-items: center;
   @include transition-base;
+  flex-shrink: 0;
 
   &--hidden {
     opacity: 0.3;
   }
 
-  @include mobile-only {
+  @include phone-only {
     transform: rotate(90deg);
-    margin: $spacing-xs 0;
+    margin: -$spacing-xs 0;
+    height: $arrow-width-mobile;
   }
 }
 
 .flow-arrow__line {
-  width: $arrow-width;
+  width: $arrow-width-mobile;
   height: $arrow-height;
   background-color: $color-border-light;
+  
+  @include respond-to('sm') {
+    width: $arrow-width;
+  }
 }
 
 .flow-arrow__head {
@@ -253,23 +419,35 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: $spacing-sm;
+  gap: $spacing-xs;
   min-width: max-content;
-  padding: $spacing-md;
-  margin-top: $spacing-md;
-
-  @include mobile-only {
+  padding: $spacing-sm;
+  margin-top: $spacing-sm;
+  
+  @include phone-only {
     flex-direction: column;
     min-width: auto;
     align-items: flex-start;
+    gap: $spacing-sm;
+    padding: $spacing-xs;
+  }
+  
+  @include respond-to('sm') {
+    gap: $spacing-sm;
+    padding: $spacing-md;
+    margin-top: $spacing-md;
   }
 }
 
 .data-format-labels__spacer {
-  min-width: $node-min-width;
+  min-width: $node-min-width-mobile;
 
-  @include mobile-only {
+  @include phone-only {
     display: none;
+  }
+  
+  @include respond-to('sm') {
+    min-width: $node-min-width;
   }
 }
 
@@ -277,8 +455,12 @@
   display: flex;
   align-items: center;
   gap: $spacing-xs;
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   @include transition-base;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-sm;
+  }
 
   &--hidden {
     opacity: 0.3;
@@ -292,15 +474,20 @@
 }
 
 .data-format-labels__arrow {
-  @include mobile-only {
+  @include phone-only {
     display: none;
   }
 }
 
 .data-format-labels__badge {
-  padding: $spacing-xs $spacing-sm;
+  padding: 2px $spacing-xs;
   border-radius: $border-radius-sm;
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
+  
+  @include respond-to('sm') {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
+  }
 
   &--purple { background-color: rgba($color-purple, 0.2); }
   &--pink { background-color: rgba($color-pink, 0.2); }
@@ -315,63 +502,112 @@
 
 .code-panel {
   @include glassmorphism-dark;
-  border-radius: $border-radius-xl;
+  border-radius: $border-radius-lg;
   overflow: hidden;
   @include fade-in;
+  
+  @include respond-to('sm') {
+    border-radius: $border-radius-xl;
+  }
 }
 
 .code-panel__header {
-  padding: $code-panel-padding;
+  padding: $spacing-md;
   border-bottom: $border-width solid $color-border;
+  
+  @include respond-to('sm') {
+    padding: $code-panel-padding;
+  }
 }
 
 .code-panel__title-row {
   display: flex;
   align-items: center;
-  gap: $spacing-md;
+  gap: $spacing-sm;
   flex-wrap: wrap;
+  
+  @include respond-to('sm') {
+    gap: $spacing-md;
+  }
 }
 
 .code-panel__indicator {
-  width: $node-dot-size-lg;
-  height: $node-dot-size-lg;
+  width: 12px;
+  height: 12px;
   border-radius: $border-radius-full;
   flex-shrink: 0;
+  
+  @include respond-to('sm') {
+    width: $node-dot-size-lg;
+    height: $node-dot-size-lg;
+  }
 }
 
 .code-panel__title {
-  font-size: $font-size-xl;
+  font-size: $font-size-lg;
   font-weight: $font-weight-bold;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-xl;
+  }
 }
 
 .code-panel__sublabel {
   color: $color-text-secondary;
+  font-size: $font-size-sm;
 }
 
 .code-panel__explanation {
   margin-top: $spacing-sm;
   color: $color-text-secondary;
   line-height: 1.6;
+  font-size: $font-size-sm;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-base;
+  }
 }
 
 .code-panel__body {
-  padding: $code-panel-padding;
+  padding: $spacing-sm;
+  
+  @include respond-to('sm') {
+    padding: $code-panel-padding;
+  }
 }
 
 .code-panel__pre {
   background-color: $color-background;
-  border-radius: $border-radius-xl;
-  padding: $code-block-padding;
+  border-radius: $border-radius-lg;
+  padding: $spacing-sm;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   @include custom-scrollbar;
+  
+  // Better horizontal scroll on mobile
+  @include phone-only {
+    margin: 0 (-$spacing-sm);
+    border-radius: 0;
+    padding: $spacing-sm;
+  }
+  
+  @include respond-to('sm') {
+    border-radius: $border-radius-xl;
+    padding: $code-block-padding;
+  }
 }
 
 .code-panel__code {
   font-family: $font-family-mono;
-  font-size: $font-size-base;
+  font-size: $font-size-xs;
   color: $color-text-secondary;
   white-space: pre;
-  line-height: 1.6;
+  line-height: 1.5;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-base;
+    line-height: 1.6;
+  }
 }
 
 // ===========================================
@@ -379,24 +615,40 @@
 // ===========================================
 
 .flow-legend {
-  margin-top: $spacing-xl;
-  padding: $code-panel-padding;
+  margin-top: $spacing-lg;
+  padding: $spacing-md;
   background-color: $color-surface-light;
-  border-radius: $border-radius-xl;
+  border-radius: $border-radius-lg;
   border: $border-width solid $color-border;
+  
+  @include respond-to('sm') {
+    margin-top: $spacing-xl;
+    padding: $code-panel-padding;
+    border-radius: $border-radius-xl;
+  }
 }
 
 .flow-legend__title {
-  font-size: $font-size-lg;
+  font-size: $font-size-base;
   font-weight: $font-weight-semibold;
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-sm;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-md;
+  }
 }
 
 .flow-legend__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: $spacing-md;
+  gap: $spacing-sm;
 
+  @include respond-to('sm') {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+  }
+  
   @include respond-to('md') {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -405,15 +657,25 @@
 .flow-legend__item {
   display: flex;
   align-items: flex-start;
-  gap: $spacing-md;
+  gap: $spacing-sm;
+  
+  @include respond-to('sm') {
+    gap: $spacing-md;
+  }
 }
 
 .flow-legend__dot {
-  width: $node-dot-size;
-  height: $node-dot-size;
+  width: 10px;
+  height: 10px;
   border-radius: $border-radius-full;
-  margin-top: $spacing-xs;
+  margin-top: 2px;
   flex-shrink: 0;
+  
+  @include respond-to('sm') {
+    width: $node-dot-size;
+    height: $node-dot-size;
+    margin-top: $spacing-xs;
+  }
 
   &--indigo { background-color: $color-indigo; }
   &--yellow { background-color: $color-yellow; }
@@ -422,11 +684,16 @@
 
 .flow-legend__content {
   flex: 1;
+  min-width: 0; // Allow text truncation
 }
 
 .flow-legend__label {
   font-weight: $font-weight-medium;
-  font-size: $font-size-base;
+  font-size: $font-size-sm;
+
+  @include respond-to('sm') {
+    font-size: $font-size-base;
+  }
 
   &--indigo { color: $color-indigo; }
   &--yellow { color: $color-yellow; }
@@ -434,9 +701,14 @@
 }
 
 .flow-legend__description {
-  font-size: $font-size-base;
+  font-size: $font-size-xs;
   color: $color-text-secondary;
-  margin-top: $spacing-xs;
+  margin-top: 2px;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-base;
+    margin-top: $spacing-xs;
+  }
 }
 
 // ===========================================
@@ -444,10 +716,16 @@
 // ===========================================
 
 .fullstack-flow__footer {
-  margin-top: $spacing-lg;
+  margin-top: $spacing-md;
   text-align: center;
   color: $color-text-muted;
-  font-size: $font-size-base;
+  font-size: $font-size-sm;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  
+  @include respond-to('sm') {
+    margin-top: $spacing-lg;
+    font-size: $font-size-base;
+  }
 }
 
 // ===========================================
@@ -457,13 +735,19 @@
 .file-modal__backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
-  align-items: center;
+  align-items: flex-end; // Start from bottom on mobile
   justify-content: center;
   z-index: $z-index-modal;
-  padding: $spacing-md;
+  padding: 0;
   animation: fadeIn 0.2s ease-out;
+  
+  @include respond-to('sm') {
+    align-items: center;
+    padding: $spacing-md;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 }
 
 @keyframes fadeIn {
@@ -477,15 +761,39 @@
 
 .file-modal {
   background-color: $color-surface;
-  border-radius: $border-radius-xl;
+  border-radius: $border-radius-xl $border-radius-xl 0 0;
   border: $border-width solid $color-border;
-  max-width: 500px;
+  border-bottom: none;
+  max-width: 100%;
   width: 100%;
   max-height: 90vh;
+  max-height: 90dvh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  animation: slideUp 0.25s ease-out;
+  animation: slideUpMobile 0.25s ease-out;
+  
+  // Safe area for notched devices
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  
+  @include respond-to('sm') {
+    border-radius: $border-radius-xl;
+    border-bottom: $border-width solid $color-border;
+    max-width: 500px;
+    max-height: 85vh;
+    animation: slideUp 0.25s ease-out;
+  }
+}
+
+@keyframes slideUpMobile {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideUp {
@@ -503,54 +811,89 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: $spacing-lg;
+  padding: $spacing-md;
   border-bottom: $border-width solid $color-border;
+  
+  @include respond-to('sm') {
+    padding: $spacing-lg;
+  }
 }
 
 .file-modal__header-content {
   display: flex;
   align-items: flex-start;
-  gap: $spacing-md;
+  gap: $spacing-sm;
+  min-width: 0; // Allow text truncation
+  flex: 1;
+  
+  @include respond-to('sm') {
+    gap: $spacing-md;
+  }
 }
 
 .file-modal__icon-wrapper {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: $border-radius-md;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  
+  @include respond-to('sm') {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 .file-modal__icon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   color: $color-text-primary;
+  
+  @include respond-to('sm') {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .file-modal__title-group {
   display: flex;
   flex-direction: column;
-  gap: $spacing-xs;
+  gap: 2px;
+  min-width: 0; // Allow text truncation
+  
+  @include respond-to('sm') {
+    gap: $spacing-xs;
+  }
 }
 
 .file-modal__title {
-  font-size: $font-size-lg;
+  font-size: $font-size-base;
   font-weight: $font-weight-bold;
   color: $color-text-primary;
   margin: 0;
+  @include text-truncate;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-lg;
+  }
 }
 
 .file-modal__path {
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   font-family: $font-family-mono;
   color: $color-text-muted;
+  @include text-truncate;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-sm;
+  }
 }
 
 .file-modal__close {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: $border-radius-md;
   border: none;
   background-color: transparent;
@@ -560,6 +903,12 @@
   align-items: center;
   justify-content: center;
   @include transition-fast;
+  @include touch-target;
+  flex-shrink: 0;
+  margin-left: $spacing-sm;
+  
+  // Touch improvements
+  -webkit-tap-highlight-color: transparent;
 
   svg {
     width: 18px;
@@ -570,21 +919,36 @@
     background-color: rgba(255, 255, 255, 0.1);
     color: $color-text-primary;
   }
+  
+  &:active {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
 }
 
 .file-modal__body {
-  padding: $spacing-lg;
+  padding: $spacing-md;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  @include respond-to('sm') {
+    padding: $spacing-lg;
+  }
 }
 
 .file-modal__context {
   display: flex;
   align-items: center;
   gap: $spacing-sm;
-  padding: $spacing-sm $spacing-md;
+  padding: $spacing-sm;
   background-color: rgba(255, 255, 255, 0.05);
   border-radius: $border-radius-md;
-  margin-bottom: $spacing-lg;
+  margin-bottom: $spacing-md;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  @include respond-to('sm') {
+    padding: $spacing-sm $spacing-md;
+    margin-bottom: $spacing-lg;
+  }
 }
 
 .file-modal__context-dot {
@@ -595,42 +959,73 @@
 }
 
 .file-modal__context-text {
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   color: $color-text-secondary;
 
   strong {
     color: $color-text-primary;
   }
+  
+  @include respond-to('sm') {
+    font-size: $font-size-sm;
+  }
 }
 
 .file-modal__section {
-  margin-bottom: $spacing-lg;
+  margin-bottom: $spacing-md;
+  padding: $spacing-sm;
+  background-color: rgba(255, 255, 255, 0.02);
+  border-radius: $border-radius-md;
+  border-left: 3px solid $color-border-light;
+  @include transition-fast;
 
   &:last-child {
     margin-bottom: 0;
   }
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+  
+  @include respond-to('sm') {
+    margin-bottom: $spacing-lg;
+    padding: $spacing-md;
+  }
 }
 
 .file-modal__section-title {
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   font-weight: $font-weight-semibold;
   color: $color-text-muted;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: $spacing-sm;
+  margin-bottom: $spacing-xs;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-sm;
+    margin-bottom: $spacing-sm;
+  }
 }
 
 .file-modal__description {
-  font-size: $font-size-base;
+  font-size: $font-size-sm;
   color: $color-text-secondary;
   line-height: 1.6;
   margin: 0;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-base;
+  }
 }
 
 .file-modal__details {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
+  gap: $spacing-xs;
+  
+  @include respond-to('sm') {
+    gap: $spacing-sm;
+  }
 }
 
 .file-modal__detail {
@@ -640,31 +1035,63 @@
 }
 
 .file-modal__detail-label {
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   color: $color-text-muted;
-  min-width: 70px;
+  min-width: 60px;
+  
+  @include respond-to('sm') {
+    font-size: $font-size-sm;
+    min-width: 70px;
+  }
 }
 
 .file-modal__detail-value {
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   color: $color-text-secondary;
 
   &--mono {
     font-family: $font-family-mono;
+    font-size: $font-size-xs;
+  }
+  
+  @include respond-to('sm') {
+    font-size: $font-size-sm;
+    
+    &--mono {
+      font-size: $font-size-sm;
+    }
+  }
+}
+
+.file-modal__detail-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  border-radius: $border-radius-full;
+  border: 1px solid;
+  
+  @include respond-to('sm') {
+    padding: 3px 10px;
     font-size: $font-size-sm;
   }
 }
 
 .file-modal__footer {
-  padding: $spacing-md $spacing-lg;
+  padding: $spacing-md;
   border-top: $border-width solid $color-border;
   display: flex;
   justify-content: flex-end;
+  
+  @include respond-to('sm') {
+    padding: $spacing-md $spacing-lg;
+  }
 }
 
 .file-modal__btn {
-  padding: $spacing-sm $spacing-lg;
-  font-size: $font-size-base;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-sm;
   font-weight: $font-weight-medium;
   color: $color-text-primary;
   background-color: $color-indigo;
@@ -672,9 +1099,22 @@
   border-radius: $border-radius-md;
   cursor: pointer;
   @include transition-fast;
+  @include touch-target;
+  
+  // Touch improvements
+  -webkit-tap-highlight-color: transparent;
+  
+  @include respond-to('sm') {
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-base;
+  }
 
   &:hover {
     background-color: darken($color-indigo, 10%);
+  }
+  
+  &:active {
+    background-color: darken($color-indigo, 15%);
   }
 
   &:focus {

@@ -97,7 +97,8 @@ const FlowNode = ({
               onMouseLeave={() => setHoveredFile(null)}
               title={file.path}
               style={{
-                '--chip-color': node.color
+                '--chip-color': node.color,
+                color: node.color
               }}
             >
               <svg 

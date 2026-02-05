@@ -7,22 +7,42 @@
 
 .btn {
   @include button-base;
+  @include touch-target;
   font-family: $font-family-sans;
+  
+  // Touch improvements
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
   
   // Size variants
   &--small {
-    padding: $spacing-xs $spacing-md;
-    font-size: $font-size-sm;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-xs;
+    
+    @include respond-to('sm') {
+      padding: $spacing-xs $spacing-md;
+      font-size: $font-size-sm;
+    }
   }
   
   &--medium {
-    padding: $spacing-sm $spacing-lg;
-    font-size: $font-size-base;
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    
+    @include respond-to('sm') {
+      padding: $spacing-sm $spacing-lg;
+      font-size: $font-size-base;
+    }
   }
   
   &--large {
-    padding: $spacing-md $spacing-xl;
-    font-size: $font-size-md;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-base;
+    
+    @include respond-to('sm') {
+      padding: $spacing-md $spacing-xl;
+      font-size: $font-size-md;
+    }
   }
   
   // Style variants
@@ -31,8 +51,10 @@
     color: $color-text-primary;
     border: none;
     
-    &:hover:not(.btn--disabled) {
-      background-color: darken($color-indigo, 10%);
+    @include hover-device {
+      &:hover:not(.btn--disabled) {
+        background-color: darken($color-indigo, 10%);
+      }
     }
     
     &:active:not(.btn--disabled) {
@@ -46,9 +68,15 @@
     color: $color-text-primary;
     border: $border-width-thick solid $color-border-light;
     
-    &:hover:not(.btn--disabled) {
-      border-color: $color-text-secondary;
-      background-color: rgba($color-text-primary, 0.05);
+    @include hover-device {
+      &:hover:not(.btn--disabled) {
+        border-color: $color-text-secondary;
+        background-color: rgba($color-text-primary, 0.05);
+      }
+    }
+    
+    &:active:not(.btn--disabled) {
+      background-color: rgba($color-text-primary, 0.1);
     }
   }
   
@@ -57,9 +85,15 @@
     color: $color-text-secondary;
     border: none;
     
-    &:hover:not(.btn--disabled) {
-      color: $color-text-primary;
-      background-color: rgba($color-text-primary, 0.1);
+    @include hover-device {
+      &:hover:not(.btn--disabled) {
+        color: $color-text-primary;
+        background-color: rgba($color-text-primary, 0.1);
+      }
+    }
+    
+    &:active:not(.btn--disabled) {
+      background-color: rgba($color-text-primary, 0.15);
     }
   }
   
@@ -68,5 +102,12 @@
     background-color: darken($color-indigo, 20%);
     cursor: not-allowed;
     opacity: 0.6;
+  }
+  
+  // Full width on mobile option
+  &--full-mobile {
+    @include phone-only {
+      width: 100%;
+    }
   }
 }

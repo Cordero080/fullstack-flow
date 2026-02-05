@@ -4,7 +4,7 @@ An interactive React application that visualizes the complete request-response c
 
 ![Full-Stack Flow Demo](./demo-screenshot.png)
 
-##  Purpose
+## Purpose
 
 Understanding how frontend, backend, and database communicate is fundamental for any developer. This tool provides:
 
@@ -14,6 +14,7 @@ Understanding how frontend, backend, and database communicate is fundamental for
 - **Animated flow** to watch data travel through the system
 
 Perfect for:
+
 - Bootcamp students learning full-stack architecture
 - Junior developers solidifying their understanding
 - Technical interviews (explain the request-response cycle)
@@ -29,17 +30,17 @@ UI RENDER ← FRONTEND ← HTTP RESPONSE ← BACKEND ← DB RESPONSE
 
 ### 9 Steps Visualized:
 
-| Step | Action | Files Involved |
-|------|--------|----------------|
-| 1. User Click | UI Event triggered | `PostForm.jsx`, `Feed.jsx` |
-| 2. Frontend | JS handler executes | `PostForm.jsx`, `usePostForm.js` |
-| 3. Browser | HTTP Request created | `api.js`, `postService.js` |
-| 4. Backend Server | Route handles request | `urls.py`, `views.py`, `serializers.py` |
-| 5. Database | SQL query executes | `models.py`, `migrations/` |
-| 6. DB Response | Data rows returned | `models.py`, `serializers.py` |
-| 7. Backend Server | JSON response formed | `views.py`, `serializers.py` |
-| 8. HTTP Response | Network transit | `api.js`, `postService.js` |
-| 9. Frontend Renders | DOM updates | `PostList.jsx`, `PostCard.jsx` |
+| Step                | Action                | Files Involved                          |
+| ------------------- | --------------------- | --------------------------------------- |
+| 1. User Click       | UI Event triggered    | `PostForm.jsx`, `Feed.jsx`              |
+| 2. Frontend         | JS handler executes   | `PostForm.jsx`, `usePostForm.js`        |
+| 3. Browser          | HTTP Request created  | `api.js`, `postService.js`              |
+| 4. Backend Server   | Route handles request | `urls.py`, `views.py`, `serializers.py` |
+| 5. Database         | SQL query executes    | `models.py`, `migrations/`              |
+| 6. DB Response      | Data rows returned    | `models.py`, `serializers.py`           |
+| 7. Backend Server   | JSON response formed  | `views.py`, `serializers.py`            |
+| 8. HTTP Response    | Network transit       | `api.js`, `postService.js`              |
+| 9. Frontend Renders | DOM updates           | `PostList.jsx`, `PostCard.jsx`          |
 
 ## 🛠️ Tech Stack
 
@@ -78,6 +79,7 @@ src/
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 
@@ -106,31 +108,40 @@ npm run build
 ## 🎨 Features
 
 ### Interactive Nodes
+
 Click any node to reveal:
+
 - Explanation of what happens at that step
 - Real code examples (React handlers, Django views, SQL queries)
 - Files involved in a real project
 
 ### Animate Flow
+
 Watch data travel through the entire system with the "Animate Flow" button. Each step highlights sequentially (800ms intervals).
 
 ### Data Format Labels
+
 Visual indicators showing how data transforms:
+
 - `HTTP Request` → `JSON/REST` → `SQL Query`
 - `JSON Response` → `DOM Update`
 
 ### Dark Theme
+
 Easy on the eyes, perfect for late-night study sessions.
 
 ## 📸 Screenshots
 
 ### Flow Diagram
+
 ![Flow Diagram](./screenshots/flow-diagram.png)
 
 ### Code Panel Expanded
+
 ![Code Panel](./screenshots/code-panel.png)
 
 ### Animation in Progress
+
 ![Animation](./screenshots/animation.png)
 
 ## 🧠 Learning Objectives
@@ -188,10 +199,9 @@ Edit `src/styles/_variables.scss`:
 
 ```scss
 $node-colors: (
-  'user-click': #6366f1,
-  'frontend': #8b5cf6,
-  'browser': #a855f7,
-  // ... customize your palette
+  "user-click": #6366f1,
+  "frontend": #8b5cf6,
+  "browser": #a855f7, // ... customize your palette
 );
 ```
 

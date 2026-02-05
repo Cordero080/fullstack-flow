@@ -4,8 +4,11 @@
 // RESPONSIVE MIXINS
 // ===========================================
 
+// Min-width breakpoints (mobile-first approach)
 @mixin respond-to($breakpoint) {
-  @if $breakpoint == 'sm' {
+  @if $breakpoint == 'xs' {
+    @media (min-width: $breakpoint-xs) { @content; }
+  } @else if $breakpoint == 'sm' {
     @media (min-width: $breakpoint-sm) { @content; }
   } @else if $breakpoint == 'md' {
     @media (min-width: $breakpoint-md) { @content; }
@@ -18,8 +21,102 @@
   }
 }
 
+// Max-width breakpoints (for specific max-width queries)
+@mixin respond-down($breakpoint) {
+  @if $breakpoint == 'xs' {
+    @media (max-width: #{$breakpoint-xs - 1px}) { @content; }
+  } @else if $breakpoint == 'sm' {
+    @media (max-width: #{$breakpoint-sm - 1px}) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (max-width: #{$breakpoint-md - 1px}) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (max-width: #{$breakpoint-lg - 1px}) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (max-width: #{$breakpoint-xl - 1px}) { @content; }
+  } @else if $breakpoint == '2xl' {
+    @media (max-width: #{$breakpoint-2xl - 1px}) { @content; }
+  }
+}
+
+// Specific device targets
 @mixin mobile-only {
   @media (max-width: #{$breakpoint-md - 1px}) { @content; }
+}
+
+@mixin small-phone {
+  @media (max-width: #{$breakpoint-xs - 1px}) { @content; }
+}
+
+@mixin phone-only {
+  @media (max-width: #{$breakpoint-sm - 1px}) { @content; }
+}
+
+@mixin tablet-only {
+  @media (min-width: $breakpoint-sm) and (max-width: #{$breakpoint-lg - 1px}) { @content; }
+}
+
+@mixin desktop-only {
+  @media (min-width: $breakpoint-lg) { @content; }
+}
+
+// Orientation queries
+@mixin landscape {
+  @media (orientation: landscape) and (max-width: #{$breakpoint-md - 1px}) { @content; }
+}
+
+@mixin portrait {
+  @media (orientation: portrait) { @content; }
+}
+
+// Touch device detection
+@mixin touch-device {
+  @media (hover: none) and (pointer: coarse) { @content; }
+}
+
+@mixin hover-device {
+  @media (hover: hover) and (pointer: fine) { @content; }
+}
+
+// Safe area for notched devices (iPhone X, etc.)
+@mixin safe-area-inset($property, $direction, $fallback: 0) {
+  #{$property}: $fallback;
+  #{$property}: env(safe-area-inset-#{$direction}, $fallback);
+}
+
+// Fluid typography
+@mixin fluid-type($min-size, $max-size, $min-width: $breakpoint-xs, $max-width: $breakpoint-xl) {
+  font-size: $min-size;
+  
+  @media (min-width: $min-width) {
+    font-size: calc(#{$min-size} + #{strip-unit($max-size - $min-size)} * ((100vw - #{$min-width}) / #{strip-unit($max-width - $min-width)}));
+  }
+  
+  @media (min-width: $max-width) {
+    font-size: $max-size;
+  }
+}
+
+// Strip unit helper
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+  @return $number;
+}
+
+// Responsive spacing
+@mixin responsive-padding($top: $spacing-md, $right: $spacing-md, $bottom: $spacing-md, $left: $spacing-md) {
+  padding: calc(#{$top} * 0.75) calc(#{$right} * 0.75) calc(#{$bottom} * 0.75) calc(#{$left} * 0.75);
+  
+  @include respond-to('sm') {
+    padding: $top $right $bottom $left;
+  }
+}
+
+// Touch-friendly minimum size
+@mixin touch-target {
+  min-width: $touch-target-min;
+  min-height: $touch-target-min;
 }
 
 // ===========================================
