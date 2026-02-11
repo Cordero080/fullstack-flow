@@ -259,8 +259,8 @@
   @include phone-only {
     flex-direction: column;
     min-width: auto;
-    gap: $spacing-sm;
-    align-items: stretch;
+    gap: 0;
+    align-items: center;
     padding: $spacing-xs;
   }
   
@@ -287,12 +287,6 @@
   min-width: 80px;
   @include transition-base;
   
-  @include phone-only {
-    flex-direction: row;
-    gap: $spacing-sm;
-    padding: $spacing-sm $spacing-md;
-  }
-  
   &--hidden {
     opacity: 0.3;
   }
@@ -315,10 +309,6 @@
   font-style: italic;
   text-align: center;
   margin-top: $spacing-xs;
-  
-  @include phone-only {
-    margin-top: 0;
-  }
   
   @include respond-to('sm') {
     font-size: $font-size-sm;
@@ -390,10 +380,10 @@
 
   @include phone-only {
     width: 100%;
-    max-width: 100%;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: $spacing-sm;
+    max-width: 280px;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-xs;
     padding: $spacing-sm $spacing-md;
   }
 }
@@ -428,11 +418,6 @@
   margin-bottom: $spacing-xs;
   flex-shrink: 0;
   
-  @include phone-only {
-    margin-bottom: 0;
-    margin-right: $spacing-xs;
-  }
-  
   @include respond-to('sm') {
     width: $node-dot-size;
     height: $node-dot-size;
@@ -444,11 +429,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  
-  @include phone-only {
-    align-items: flex-start;
-    flex: 1;
-  }
 }
 
 .flow-node__label {
@@ -457,10 +437,6 @@
   text-align: center;
   line-height: 1.2;
   color: $color-text-primary;
-  
-  @include phone-only {
-    text-align: left;
-  }
   
   @include respond-to('sm') {
     font-size: $font-size-base;
@@ -486,10 +462,7 @@
   color: rgba(255, 255, 255, 0.75);
   margin-top: 4px;
   font-weight: 400;
-  
-  @include phone-only {
-    text-align: left;
-  }
+  text-align: center;
   
   @include respond-to('sm') {
     font-size: $font-size-sm;
@@ -505,11 +478,6 @@
   margin-top: $spacing-xs;
   justify-content: center;
   max-width: 120px;
-  
-  @include phone-only {
-    justify-content: flex-start;
-    max-width: none;
-  }
   
   @include respond-to('sm') {
     gap: $spacing-xs;
@@ -604,9 +572,11 @@
   }
 
   @include phone-only {
-    transform: rotate(90deg);
-    margin: -$spacing-xs 0;
-    height: $arrow-width-mobile;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    width: 100%;
   }
 }
 
@@ -614,6 +584,11 @@
   width: $arrow-width-mobile;
   height: $arrow-height;
   background-color: $color-border-light;
+  
+  @include phone-only {
+    width: $arrow-height;
+    height: 16px;
+  }
   
   @include respond-to('sm') {
     width: $arrow-width;
@@ -626,6 +601,13 @@
   border-top: $arrow-head-size solid transparent;
   border-bottom: $arrow-head-size solid transparent;
   border-left: 6px solid $color-border-light;
+  
+  @include phone-only {
+    border-top: 6px solid $color-border-light;
+    border-bottom: none;
+    border-left: $arrow-head-size solid transparent;
+    border-right: $arrow-head-size solid transparent;
+  }
 }
 
 // ===========================================
@@ -633,24 +615,14 @@
 // ===========================================
 
 .data-format-labels {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: $spacing-xs;
-  min-width: max-content;
-  padding: $spacing-sm;
-  margin-top: $spacing-sm;
-  
-  @include phone-only {
-    flex-direction: column;
-    min-width: auto;
-    align-items: flex-start;
-    gap: $spacing-sm;
-    padding: $spacing-xs;
-  }
+  display: none;
   
   @include respond-to('sm') {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     gap: $spacing-sm;
+    min-width: max-content;
     padding: $spacing-md;
     margin-top: $spacing-md;
   }
