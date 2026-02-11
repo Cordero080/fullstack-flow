@@ -1,0 +1,92 @@
+// ================================================
+// LANDING PAGE - Numen Spectral Style
+// ================================================
+
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-xl);
+  position: relative;
+  overflow: hidden;
+  
+  // Metallic blue holographic background
+  background:
+    linear-gradient(180deg, 
+      #1a2566 0%, 
+      #2a4088 30%, 
+      #2a4088 60%, 
+      #3050a0 68%, 
+      #3a5aac 70%, 
+      #3050a0 72%, 
+      #2a4088 80%, 
+      #1a2566 100%
+    ),
+    radial-gradient(ellipse at 20% 20%, rgba(120, 180, 255, 0.2), transparent 40%),
+    radial-gradient(ellipse at 80% 30%, rgba(180, 200, 255, 0.1), transparent 35%),
+    radial-gradient(ellipse at 50% 80%, rgba(100, 140, 255, 0.15), transparent 45%),
+    linear-gradient(180deg, 
+      rgba(80, 120, 200, 0.08) 0%, 
+      rgba(150, 180, 255, 0.1) 65%, 
+      rgba(180, 200, 255, 0.12) 70%, 
+      rgba(150, 180, 255, 0.1) 75%, 
+      rgba(80, 120, 200, 0.08) 100%
+    );
+  background-size: 100% 100%, 200% 200%, 200% 200%, 200% 200%, 300% 300%;
+  background-blend-mode: normal, screen, screen, screen, overlay;
+
+  &__title {
+    font-family: var(--font-title);
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 500;
+    font-style: normal;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+    z-index: 1;
+    color: rgba(255, 255, 255, 0.897);
+    -webkit-mask-image: linear-gradient(180deg, white 60%, transparent 100%);
+    mask-image: linear-gradient(180deg, white 60%, transparent 100%);
+  }
+
+  &__enter {
+    padding: 14px 40px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: var(--font-size-lg);
+    font-weight: 400;
+    color: var(--text-primary);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 1;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+      box-shadow: 
+        var(--glow-cyan),
+        0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+  }
+}
+
+// Gradient shimmer animation
+@keyframes gradientShimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}

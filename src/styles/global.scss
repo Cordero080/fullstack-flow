@@ -1,9 +1,13 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
-// ===========================================
-// CSS RESET & BASE STYLES
-// ===========================================
+// ================================================
+// GLOBAL STYLES - Numen Design System
+// ================================================
+
+// ============================================
+// CSS RESET
+// ============================================
 
 *,
 *::before,
@@ -17,29 +21,54 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  // Prevent font scaling in landscape on iOS
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  // Smooth scrolling
   scroll-behavior: smooth;
 }
 
 body {
-  font-family: $font-family-sans;
-  background-color: $color-background;
-  color: $color-text-primary;
+  font-family: var(--font-main);
+  font-weight: 400;
+  font-size: 1.1rem;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
   line-height: 1.5;
   min-height: 100vh;
-  min-height: 100dvh; // Dynamic viewport height for mobile
-  // Prevent overscroll/bounce on iOS
+  min-height: 100dvh;
   overscroll-behavior: none;
-  // Enable touch scrolling
   -webkit-overflow-scrolling: touch;
 }
 
-// ===========================================
-// TYPOGRAPHY DEFAULTS
-// ===========================================
+// ============================================
+// GLOBAL SCROLLBAR - Dark theme
+// ============================================
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// ============================================
+// TYPOGRAPHY
+// ============================================
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: $font-weight-bold;
@@ -47,23 +76,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
-  color: $color-text-secondary;
+  color: var(--text-secondary);
 }
 
 a {
-  color: $color-indigo;
+  color: var(--primary);
   text-decoration: none;
   @include transition-fast;
-  // Improve touch target
-  @include touch-device {
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-  }
   
   @include hover-device {
     &:hover {
-      color: lighten($color-indigo, 10%);
+      color: var(--cyan);
     }
   }
 }
@@ -72,9 +95,92 @@ code, pre {
   font-family: $font-family-mono;
 }
 
-// ===========================================
+// ============================================
+// ANIMATIONS
+// ============================================
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(3px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes gradientShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes blobMorph {
+  0%, 100% {
+    border-radius: 45% 55% 60% 40% / 50% 60% 40% 50%;
+    transform: translateX(-50%) rotate(0deg) scale(1);
+  }
+  33% {
+    border-radius: 60% 40% 45% 55% / 40% 50% 60% 50%;
+    transform: translateX(-50%) rotate(120deg) scale(1.1);
+  }
+  66% {
+    border-radius: 50% 50% 55% 45% / 60% 40% 50% 60%;
+    transform: translateX(-50%) rotate(240deg) scale(0.95);
+  }
+}
+
+@keyframes blobFadeIn {
+  0% {
+    opacity: 0;
+    filter: blur(30px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease both;
+}
+
+.scale-in {
+  animation: scaleIn 0.3s ease;
+}
+
+// ============================================
 // UTILITY CLASSES
-// ===========================================
+// ============================================
 
 .sr-only {
   position: absolute;
@@ -88,117 +194,136 @@ code, pre {
   border: 0;
 }
 
-// Hide on specific breakpoints
-.hide-on-mobile {
-  @include phone-only {
-    display: none !important;
+// ============================================
+// BUTTON CLASSES
+// ============================================
+
+.btn {
+  @include btn-base;
+}
+
+.btn-primary {
+  border-color: var(--primary);
+  color: var(--primary);
+
+  &:hover {
+    background: rgba(124, 201, 255, 0.1);
+    box-shadow: 0 0 20px rgba(124, 201, 255, 0.3);
   }
 }
 
-.hide-on-tablet {
-  @include tablet-only {
-    display: none !important;
+.btn-filled {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: rgba(0, 0, 0, 0.9);
+  font-weight: 600;
+
+  &:hover {
+    background: #8dd3ff;
+    border-color: #8dd3ff;
+    box-shadow: var(--glow-strong);
   }
 }
 
-.hide-on-desktop {
-  @include desktop-only {
-    display: none !important;
+// ============================================
+// CARD CLASSES
+// ============================================
+
+.card {
+  @include holographic-card;
+  transition: var(--transition);
+}
+
+.card-hover {
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glow);
+    border-color: var(--border-hover);
   }
 }
 
-.show-on-mobile {
-  display: none !important;
-  
-  @include phone-only {
-    display: block !important;
-  }
+.card-glass {
+  @include glass-card;
 }
 
-// ===========================================
-// SCROLLBAR STYLING
-// ===========================================
+// ============================================
+// BACKGROUND BLOBS
+// ============================================
 
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-  
-  @include respond-to('sm') {
-    width: 8px;
-    height: 8px;
-  }
+.blob {
+  position: fixed;
+  border-radius: 45% 55% 60% 40% / 50% 60% 40% 50%;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 0;
+  animation: blobFadeIn 1.2s ease-out forwards, blobMorph 22s ease-in-out infinite 1.2s;
+  opacity: 0;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+.blob--top {
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(220, 8, 188, 0.7), rgba(255, 200, 245, 0.15) 50%, transparent 70%);
+  border: 2px solid rgba(235, 176, 176, 0.146);
 }
 
-::-webkit-scrollbar-thumb {
-  background: $color-border-light;
-  border-radius: $border-radius-full;
-  
-  @include hover-device {
-    &:hover {
-      background: lighten($color-border-light, 10%);
-    }
-  }
+.blob--bottom {
+  bottom: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(26, 115, 231, 0.7), rgba(255, 220, 200, 0.15) 50%, transparent 70%);
+  border: 2px solid rgba(125, 211, 198, 0.226);
 }
 
-// ===========================================
-// SELECTION STYLING
-// ===========================================
-
-::selection {
-  background-color: rgba($color-indigo, 0.3);
-  color: $color-text-primary;
+.blob--left {
+  left: -175px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(26, 231, 132, 0.7), rgba(200, 255, 220, 0.15) 50%, transparent 70%);
+  border: 2px solid rgba(185, 216, 200, 0.204);
 }
 
-// ===========================================
-// FOCUS STYLES
-// ===========================================
-
-:focus-visible {
-  outline: 2px solid $color-indigo;
-  outline-offset: 2px;
+.blob--right {
+  right: -175px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(220, 192, 8, 0.7), rgba(255, 245, 200, 0.15) 50%, transparent 70%);
+  border: 2px solid rgba(196, 191, 134, 0.155);
 }
 
-// Remove tap highlight on mobile
-button, a, [role="button"] {
-  -webkit-tap-highlight-color: transparent;
-}
+// ============================================
+// MAIN CONTAINER
+// ============================================
 
-// ===========================================
-// APP CONTAINER
-// ===========================================
-
-#root {
+main {
+  position: relative;
+  z-index: 1;
   min-height: 100vh;
-  min-height: 100dvh;
 }
 
-// ===========================================
-// RESPONSIVE IMAGES
-// ===========================================
+// ============================================
+// RESPONSIVE
+// ============================================
 
-img, svg {
-  max-width: 100%;
-  height: auto;
-}
-
-// ===========================================
-// TOUCH IMPROVEMENTS
-// ===========================================
-
-// Prevent text selection on double-tap
-.no-select {
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-// Improve touch interactions
-@include touch-device {
-  // Slightly faster transitions on touch
-  * {
-    transition-duration: 0.15s !important;
+@media (max-width: $breakpoint-tablet) {
+  .blob {
+    width: 250px;
+    height: 250px;
   }
+
+  .blob--top { top: -125px; }
+  .blob--bottom { bottom: -125px; }
+  .blob--left { left: -125px; }
+  .blob--right { right: -125px; }
 }

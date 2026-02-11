@@ -1,20 +1,188 @@
-// ===========================================
-// COLOR PALETTE
-// ===========================================
+// ================================================
+// FULLSTACK-FLOW DESIGN VARIABLES
+// Spectral Glassmorphic Design System (from Numen)
+// ================================================
 
-// Base colors
-$color-background: #030712;
-$color-surface: #111827;
-$color-surface-light: rgba(17, 24, 39, 0.5);
-$color-border: #1f2937;
-$color-border-light: #374151;
+// Adobe Typekit fonts
+@import url("https://use.typekit.net/nxn1rxl.css");
+@import url("https://use.typekit.net/hek8fyt.css");
+
+:root {
+  // ============================================
+  // BACKGROUNDS
+  // ============================================
+  --bg-base: #1b1b90;
+  --bg-card: rgba(21, 21, 214, 0);
+  --bg-card-solid: #0f0f19;
+  --bg-card-hover: rgba(20, 20, 35, 0.95);
+  --bg-glass: rgba(255, 255, 255, 0.04);
+  --bg-glass-hover: rgba(255, 255, 255, 0.08);
+  --bg-input: rgba(255, 255, 255, 0.05);
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  
+  // ============================================
+  // TEXT
+  // ============================================
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --text-muted: rgba(255, 255, 255, 0.45);
+  --text-placeholder: rgba(255, 255, 255, 0.35);
+  
+  // ============================================
+  // BORDERS
+  // ============================================
+  --border-default: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-focus: rgba(0, 212, 255, 0.5);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+  
+  // ============================================
+  // BRAND COLORS
+  // ============================================
+  --primary: #7cc9ff;
+  --secondary: #a783ff;
+  --accent: #1ae784;
+  
+  --cyan: #00d4ff;
+  --pink: #ff6b9d;
+  --emerald: #34d399;
+  --amber: #fbbf24;
+  --purple: #a855f7;
+  --rose: #f472b6;
+  --magenta: #dc08bc;
+  
+  --color-cyan: #1a73e7;
+  --color-cyan-rgb: 26, 115, 231;
+  --color-magenta: #dc08bc;
+  --color-magenta-rgb: 220, 8, 188;
+  --color-aqua: #1ae784;
+  --color-aqua-rgb: 26, 231, 132;
+  
+  // ============================================
+  // SURFACES
+  // ============================================
+  --surface: rgba(255, 255, 255, 0.02);
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  --surface-active: rgba(255, 255, 255, 0.08);
+  
+  // ============================================
+  // GLOWS & EFFECTS
+  // ============================================
+  --glow: 0 0 20px rgba(124, 201, 255, 0.25);
+  --glow-strong: 0 0 30px rgba(124, 201, 255, 0.4);
+  --glow-cyan: 0 0 20px rgba(var(--color-cyan-rgb), 0.3);
+  --glow-magenta: 0 0 20px rgba(var(--color-magenta-rgb), 0.3);
+  --glow-aqua: 0 0 20px rgba(var(--color-aqua-rgb), 0.3);
+  
+  // ============================================
+  // TYPOGRAPHY
+  // ============================================
+  --font-main: "Rajdhani", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "stop-mn", sans-serif;
+  --font-title: "riant-display", sans-serif;
+  --font-label: "new-science-mono", sans-serif;
+  
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-body: 0.95rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-title: 1.25rem;
+  --font-size-xl: 1.5rem;
+  
+  // ============================================
+  // SPACING
+  // ============================================
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 40px;
+  
+  // ============================================
+  // BORDER RADIUS
+  // ============================================
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-lg: 24px;
+  --radius-full: 999px;
+  
+  // ============================================
+  // TRANSITIONS
+  // ============================================
+  --transition: 0.18s ease;
+  --transition-slow: 0.3s ease;
+  
+  // ============================================
+  // GLASSMORPHISM
+  // ============================================
+  --glass-blur-sm: blur(10px);
+  --glass-blur-md: blur(15px);
+  --glass-blur-lg: blur(20px);
+  
+  // ============================================
+  // GRADIENTS
+  // ============================================
+  --gradient-spectral: linear-gradient(135deg, 
+    rgba(var(--color-aqua-rgb), 0.8),
+    rgba(var(--color-cyan-rgb), 0.8),
+    rgba(var(--color-magenta-rgb), 0.8)
+  );
+  
+  --gradient-cyan-magenta: linear-gradient(135deg, 
+    rgba(var(--color-cyan-rgb), 0.2),
+    rgba(var(--color-magenta-rgb), 0.2)
+  );
+  
+  // ============================================
+  // HOLOGRAPHIC EFFECT
+  // ============================================
+  --holographic-bg: 
+    linear-gradient(145deg, #0a0a0a, #000000),
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(0, 0, 0, 0.5), transparent 50%),
+    linear-gradient(45deg, 
+      rgba(138, 43, 226, 0.05), 
+      rgba(0, 212, 255, 0.05), 
+      rgba(138, 43, 226, 0.05)
+    );
+  
+  // ============================================
+  // SHADOWS
+  // ============================================
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+// ============================================
+// SCSS VARIABLES (for compatibility)
+// ============================================
+
+// Base colors (for SCSS compatibility)
+$color-background: #010102;
+$color-surface: rgba(255, 255, 255, 0.02);
+$color-surface-light: rgba(255, 255, 255, 0.04);
+$color-border: rgba(255, 255, 255, 0.1);
+$color-border-light: rgba(255, 255, 255, 0.15);
 
 // Text colors
 $color-text-primary: #ffffff;
-$color-text-secondary: #9ca3af;
-$color-text-muted: #6b7280;
+$color-text-secondary: rgba(255, 255, 255, 0.65);
+$color-text-muted: rgba(255, 255, 255, 0.45);
 
-// Node colors (matching the flow stages)
+// Shadows
+$shadow-glow: 0 0 20px rgba(124, 201, 255, 0.25);
+
+// Border widths
+$border-width: 1px;
+$border-width-thick: 2px;
+
+// Node colors for flow visualization
 $color-indigo: #6366f1;
 $color-violet: #8b5cf6;
 $color-purple: #a855f7;
@@ -25,7 +193,6 @@ $color-yellow: #eab308;
 $color-lime: #84cc16;
 $color-green: #22c55e;
 
-// Node colors array for dynamic usage
 $node-colors: (
   'indigo': $color-indigo,
   'violet': $color-violet,
@@ -38,112 +205,61 @@ $node-colors: (
   'green': $color-green
 );
 
-// Gradient colors
-$gradient-start: $color-indigo;
-$gradient-middle: $color-purple;
-$gradient-end: $color-pink;
+// Spacing (for SCSS usage)
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-2xl: 3rem;
 
-// ===========================================
-// SPACING
-// ===========================================
+// Typography
+$font-family-sans: var(--font-main);
+$font-family-mono: 'SF Mono', 'Fira Code', Menlo, Monaco, monospace;
+$font-family-display: var(--font-display);
 
-$spacing-xs: 0.25rem;   // 4px
-$spacing-sm: 0.5rem;    // 8px
-$spacing-md: 1rem;      // 16px
-$spacing-lg: 1.5rem;    // 24px
-$spacing-xl: 2rem;      // 32px
-$spacing-2xl: 3rem;     // 48px
-
-// ===========================================
-// TYPOGRAPHY
-// ===========================================
-
-$font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-$font-family-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Monaco, monospace;
-$font-family-display: 'Orbitron', system-ui, sans-serif;
-
-$font-size-xs: 0.625rem;   // 10px
-$font-size-sm: 0.75rem;    // 12px
-$font-size-base: 0.875rem; // 14px
-$font-size-md: 1rem;       // 16px
-$font-size-lg: 1.125rem;   // 18px
-$font-size-xl: 1.25rem;    // 20px
-$font-size-2xl: 1.5rem;    // 24px
-$font-size-3xl: 1.875rem;  // 30px
+$font-size-xs: 0.625rem;
+$font-size-sm: 0.75rem;
+$font-size-base: 0.875rem;
+$font-size-md: 1rem;
+$font-size-lg: 1.125rem;
+$font-size-xl: 1.25rem;
+$font-size-2xl: 1.5rem;
+$font-size-3xl: 1.875rem;
 
 $font-weight-normal: 400;
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
 $font-weight-bold: 700;
 
-// ===========================================
-// BORDERS & RADIUS
-// ===========================================
-
-$border-width: 1px;
-$border-width-thick: 2px;
-
-$border-radius-sm: 0.25rem;  // 4px
-$border-radius-md: 0.5rem;   // 8px
-$border-radius-lg: 0.75rem;  // 12px
-$border-radius-xl: 1rem;     // 16px
+// Borders
+$border-radius-sm: 0.25rem;
+$border-radius-md: 0.5rem;
+$border-radius-lg: 0.75rem;
+$border-radius-xl: 1rem;
 $border-radius-full: 9999px;
 
-// ===========================================
-// SHADOWS
-// ===========================================
+// Breakpoints
+$breakpoint-mobile: 640px;
+$breakpoint-tablet: 768px;
+$breakpoint-desktop: 1024px;
+$breakpoint-wide: 1280px;
 
-$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-$shadow-glow: 0 0 20px rgba(255, 255, 255, 0.2);
-
-// ===========================================
-// TRANSITIONS
-// ===========================================
-
-$transition-fast: 150ms ease;
-$transition-base: 300ms ease;
-$transition-slow: 500ms ease;
-
-// ===========================================
-// BREAKPOINTS
-// ===========================================
-
-$breakpoint-xs: 375px;   // Small phones (iPhone SE)
-$breakpoint-sm: 640px;   // Large phones / small tablets
-$breakpoint-md: 768px;   // Tablets
-$breakpoint-lg: 1024px;  // Small laptops
-$breakpoint-xl: 1280px;  // Desktops
-$breakpoint-2xl: 1536px; // Large desktops
-
-// Common device breakpoints
-$breakpoint-iphone-se: 375px;
-$breakpoint-iphone: 390px;
-$breakpoint-iphone-plus: 428px;
-$breakpoint-android: 360px;
-$breakpoint-android-lg: 412px;
-
-// ===========================================
-// Z-INDEX
-// ===========================================
-
+// Z-index
 $z-index-base: 0;
 $z-index-elevated: 10;
 $z-index-overlay: 100;
 $z-index-modal: 1000;
 
-// ===========================================
-// COMPONENT-SPECIFIC
-// ===========================================
-
-// Flow node
+// Component-specific
 $node-min-width: 100px;
 $node-min-width-mobile: 85px;
 $node-padding: $spacing-md;
 $node-padding-mobile: $spacing-sm;
 $node-dot-size: 0.75rem;
 $node-dot-size-lg: 1rem;
+$animation-step-duration: 800ms;
+$touch-target-min: 44px;
 
 // Flow arrow
 $arrow-width: 1.5rem;
@@ -156,9 +272,3 @@ $code-panel-padding: $spacing-lg;
 $code-panel-padding-mobile: $spacing-md;
 $code-block-padding: $spacing-md;
 $code-block-padding-mobile: $spacing-sm;
-
-// Animation
-$animation-step-duration: 800ms;
-
-// Touch targets (minimum 44px for accessibility)
-$touch-target-min: 44px;

@@ -417,7 +417,7 @@ const handleSubmit = async (e) => {
 
         {/* Quick Reference */}
         <div className="mt-6 text-center text-gray-500 text-sm">
-          <p>Built for understanding full-stack architecture • NUMENEON style 🌊</p>
+          <p>Built for understanding full-stack architecture • NUMENEON, IE</p>
         </div>
       </div>
     </div>
