@@ -21,6 +21,7 @@ const FullStackFlow = ({ onHome }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileNode, setSelectedFileNode] = useState(null);
   const [showAbout, setShowAbout] = useState(false);
+  const [isZoomedOut, setIsZoomedOut] = useState(false);
   
   const {
     animating,
@@ -100,50 +101,87 @@ const FullStackFlow = ({ onHome }) => {
           <p className="fullstack-flow__subtitle">
             Click any node to see the code at that step
           </p>
-          <Button
-            onClick={runAnimation}
-            disabled={animating}
-            variant="primary"
-            size="medium"
-          >
-            {animating ? 'Animating...' : '▶ Animate Flow'}
-          </Button>
+          <div className="fullstack-flow__buttons">
+            <Button
+              onClick={runAnimation}
+              disabled={animating}
+              variant="primary"
+              size="medium"
+            >
+              {animating ? 'Animating...' : '▶ Animate Flow'}
+            </Button>
+            <Button
+              onClick={() => setIsZoomedOut(!isZoomedOut)}
+              variant="secondary"
+              size="medium"
+            >
+              {isZoomedOut ? '🔍 Zoom In' : '🔎 Zoom Out'}
+            </Button>
+          </div>
         </header>
 
         {/* Flow Diagram */}
-        <section className="flow-diagram" aria-label="Data flow diagram">
-          <div className="flow-diagram__nodes">
-            {flowNodes.map((node, index) => (
-              <React.Fragment key={node.id}>
-                <FlowNode
-                  node={node}
-                  isActive={activeNodeId === node.id}
-                  onClick={handleNodeClick}
-                  animationStep={animationStep}
-                  index={index}
-                  isAnimating={animating}
-                  onFileClick={handleFileClick}
-                />
-                
-                {/* Arrow between nodes (not after the last one) */}
-                {index < flowNodes.length - 1 && (
-                  <FlowArrow isVisible={isArrowVisible(index)} />
-                )}
-              </React.Fragment>
-            ))}
-            
-            {/* Cycle indicator - shows the flow repeats */}
-            <div className={`flow-cycle-indicator ${animating && animationStep < flowNodes.length ? 'flow-cycle-indicator--hidden' : ''}`}>
-              <span className="flow-cycle-indicator__arrow">↻</span>
-              <span className="flow-cycle-indicator__text">Cycle Repeats</span>
+        <section className={`flow-diagram ${isZoomedOut ? 'flow-diagram--zoomed-out' : ''}`} aria-label="Data flow diagram">
+          {isZoomedOut ? (
+            /* Zoomed Out - Simple Overview */
+            <div className="flow-diagram__overview">
+              <div className="flow-diagram__overview-nodes">
+                {flowNodes.map((node, index) => (
+                  <React.Fragment key={node.id}>
+                    <FlowNode
+                      node={node}
+                      isActive={activeNodeId === node.id}
+                      onClick={handleNodeClick}
+                      animationStep={animationStep}
+                      index={index}
+                      isAnimating={animating}
+                      onFileClick={handleFileClick}
+                      compact
+                    />
+                    {index < flowNodes.length - 1 && (
+                      <div className="flow-diagram__mini-arrow">→</div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            /* Zoomed In - Horizontal Train View */
+            <>
+              <div className="flow-diagram__nodes">
+                {flowNodes.map((node, index) => (
+                  <React.Fragment key={node.id}>
+                    <FlowNode
+                      node={node}
+                      isActive={activeNodeId === node.id}
+                      onClick={handleNodeClick}
+                      animationStep={animationStep}
+                      index={index}
+                      isAnimating={animating}
+                      onFileClick={handleFileClick}
+                    />
+                    
+                    {/* Arrow between nodes (not after the last one) */}
+                    {index < flowNodes.length - 1 && (
+                      <FlowArrow isVisible={isArrowVisible(index)} />
+                    )}
+                  </React.Fragment>
+                ))}
+                
+                {/* Cycle indicator - shows the flow repeats */}
+                <div className={`flow-cycle-indicator ${animating && animationStep < flowNodes.length ? 'flow-cycle-indicator--hidden' : ''}`}>
+                  <span className="flow-cycle-indicator__arrow">↻</span>
+                  <span className="flow-cycle-indicator__text">Cycle Repeats</span>
+                </div>
+              </div>
 
-          {/* Data Format Labels */}
-          <DataFormatLabels
-            isAnimating={animating}
-            animationStep={animationStep}
-          />
+              {/* Data Format Labels */}
+              <DataFormatLabels
+                isAnimating={animating}
+                animationStep={animationStep}
+              />
+            </>
+          )}
         </section>
 
         {/* Code Panel - shows when a node is selected */}

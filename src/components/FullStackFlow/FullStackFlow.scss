@@ -219,6 +219,13 @@
   }
 }
 
+.fullstack-flow__buttons {
+  display: flex;
+  gap: $spacing-sm;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 // ===========================================
 // FLOW DIAGRAM CONTAINER
 // ===========================================
@@ -271,6 +278,46 @@
   
   @include respond-to('lg') {
     justify-content: center;
+  }
+}
+
+// ===========================================
+// ZOOMED OUT - SIMPLE OVERVIEW
+// ===========================================
+
+.flow-diagram--zoomed-out {
+  overflow: visible;
+}
+
+.flow-diagram__overview {
+  background: rgba(45, 105, 162, 0.187);
+  border-radius: $border-radius-xl;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: $spacing-md;
+  
+  @include respond-to('sm') {
+    padding: $spacing-lg;
+  }
+}
+
+.flow-diagram__overview-nodes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  
+  @include respond-to('sm') {
+    gap: $spacing-sm;
+  }
+}
+
+.flow-diagram__mini-arrow {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  
+  @include respond-to('sm') {
+    font-size: 18px;
   }
 }
 
@@ -557,6 +604,85 @@
   @include text-truncate;
 }
 
+// Compact variant for zoomed-out view
+.flow-node--compact {
+  min-width: 80px;
+  padding: $spacing-xs $spacing-sm;
+  
+  .flow-node__dot {
+    width: 8px;
+    height: 8px;
+    margin-bottom: 4px;
+  }
+  
+  .flow-node__label {
+    font-size: 11px;
+  }
+  
+  .flow-node__sublabel {
+    font-size: 9px;
+    margin-top: 2px;
+  }
+  
+  .flow-node__detail {
+    display: none;
+  }
+  
+  // Show only first file in compact mode
+  .flow-node__files {
+    margin-top: 4px;
+    max-width: 90px;
+    
+    // Hide all but first file
+    .flow-node__file-chip:not(:first-child) {
+      display: none;
+    }
+    
+    .flow-node__file-chip {
+      padding: 2px 6px;
+      font-size: 9px;
+      gap: 3px;
+      
+      .flow-node__file-icon {
+        width: 8px;
+        height: 8px;
+      }
+    }
+  }
+  
+  @include respond-to('sm') {
+    min-width: 110px;
+    padding: $spacing-sm;
+    
+    .flow-node__dot {
+      width: 10px;
+      height: 10px;
+    }
+    
+    .flow-node__label {
+      font-size: $font-size-sm;
+    }
+    
+    .flow-node__sublabel {
+      font-size: 11px;
+    }
+    
+    .flow-node__files {
+      max-width: 100px;
+      
+      .flow-node__file-chip {
+        padding: 3px 8px;
+        font-size: 10px;
+        
+        .flow-node__file-icon {
+          width: 9px;
+          height: 9px;
+        }
+      }
+    }
+  }
+}
+
 // ===========================================
 // FLOW ARROW
 // ===========================================
@@ -803,6 +929,51 @@
 }
 
 // ===========================================
+// SYNTAX HIGHLIGHTING
+// Color psychology for focus & retention:
+// - Cerulean Blue: Keywords (calming, focus)
+// - Coral/Salmon Red: Functions (attention, action)  
+// - Gold/Amber: Strings (warmth, completion)
+// - Sage Green: Comments (rest, context)
+// - Soft Lavender: Numbers (subtle distinction)
+// ===========================================
+
+.syntax-keyword {
+  color: #5cb3cc; // Cerulean blue - calming, promotes focus
+  font-weight: 500;
+}
+
+.syntax-function {
+  color: #e06c75; // Coral red - draws attention to actions
+}
+
+.syntax-string {
+  color: #d4a656; // Gold/amber - warmth, sense of completion
+}
+
+.syntax-comment {
+  color: #7c9a6e; // Sage green - restful, provides context
+  font-style: italic;
+}
+
+.syntax-number {
+  color: #c5a5c5; // Soft lavender - subtle distinction
+}
+
+.syntax-property {
+  color: #82c4c4; // Teal - calm property identification
+}
+
+.syntax-arrow {
+  color: #e06c75; // Coral - action indicator
+}
+
+.syntax-decorator {
+  color: #d4a656; // Gold - special annotation
+  font-style: italic;
+}
+
+// ===========================================
 // FLOW LEGEND
 // ===========================================
 
@@ -964,15 +1135,25 @@
   flex-direction: column;
   animation: slideUpMobile 0.25s ease-out;
   
+  // ADD-friendly soft glow border for visual grounding
+  box-shadow: 
+    0 0 0 1px rgba(92, 179, 204, 0.2),
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(92, 179, 204, 0.1);
+  
   // Safe area for notched devices
   padding-bottom: env(safe-area-inset-bottom, 0);
   
   @include respond-to('sm') {
     border-radius: $border-radius-xl;
     border-bottom: 1px solid var(--border);
-    max-width: 500px;
+    max-width: 640px; // Larger modal
     max-height: 85vh;
     animation: slideUp 0.25s ease-out;
+  }
+  
+  @include respond-to('md') {
+    max-width: 720px; // Even larger on tablets+
   }
 }
 
@@ -1318,5 +1499,62 @@
   &:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba($color-indigo, 0.3);
+  }
+}
+
+// ===========================================
+// FILE MODAL - CODE BLOCK (ADD-friendly)
+// ===========================================
+// Using color psychology for hyperactive minds:
+// - Soft dark background reduces visual noise
+// - Warm glow creates comfort/safety
+// - Rounded corners feel non-threatening
+// - Enough contrast without being harsh
+
+.file-modal__section--code {
+  background-color: rgba(20, 22, 30, 0.8);
+  border-radius: $border-radius-md;
+  padding: $spacing-md !important;
+  
+  // Subtle warm glow for comfort
+  box-shadow: 
+    inset 0 1px 0 rgba(92, 179, 204, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.file-modal__code-icon {
+  margin-right: 6px;
+}
+
+.file-modal__code-block {
+  margin: $spacing-sm 0 0 0;
+  padding: $spacing-md;
+  background-color: rgba(15, 17, 23, 0.9);
+  border-radius: $border-radius-md;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  // Soft inset shadow for depth
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  
+  // Gentle left border accent
+  border-left: 3px solid rgba(92, 179, 204, 0.4);
+}
+
+.file-modal__code {
+  font-family: $font-family-mono;
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: pre;
+  display: block;
+  
+  @include respond-to('sm') {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  
+  @include respond-to('md') {
+    font-size: 14px;
   }
 }

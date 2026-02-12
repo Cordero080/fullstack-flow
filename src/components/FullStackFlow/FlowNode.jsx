@@ -12,7 +12,8 @@ const FlowNode = ({
   animationStep,
   index,
   isAnimating,
-  onFileClick
+  onFileClick,
+  compact = false
 }) => {
   const [hoveredFile, setHoveredFile] = useState(null);
   const isPulsing = animationStep === index;
@@ -38,7 +39,7 @@ const FlowNode = ({
 
   return (
     <div
-      className={`flow-node ${isActive ? 'flow-node--active' : ''} ${isVisible ? '' : 'flow-node--hidden'}`}
+      className={`flow-node ${isActive ? 'flow-node--active' : ''} ${isVisible ? '' : 'flow-node--hidden'} ${compact ? 'flow-node--compact' : ''}`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -145,7 +146,9 @@ FlowNode.propTypes = {
   /** Whether animation is currently running */
   isAnimating: PropTypes.bool.isRequired,
   /** File chip click handler - receives file object and node */
-  onFileClick: PropTypes.func
+  onFileClick: PropTypes.func,
+  /** Whether to show compact version (for zoomed-out view) */
+  compact: PropTypes.bool
 };
 
 export default FlowNode;

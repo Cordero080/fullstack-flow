@@ -1,6 +1,87 @@
 import React, { useEffect } from 'react';
 
 /**
+ * Simple syntax highlighter using color psychology for focus/retention
+ * Colors chosen for calming yet stimulating effect:
+ * - Cerulean Blue: Keywords (calming, focus)
+ * - Coral/Red: Functions (attention, action)
+ * - Gold/Amber: Strings (warmth, completion)
+ * - Sage Green: Comments (rest, context)
+ */
+const highlightCode = (code) => {
+  if (!code) return '';
+  
+  // Use placeholder tokens to avoid regex conflicts with generated HTML
+  const TOKENS = {
+    COMMENT: '___COMMENT___',
+    STRING: '___STRING___',
+    KEYWORD: '___KEYWORD___',
+    FUNCTION: '___FUNCTION___',
+    NUMBER: '___NUMBER___',
+    ARROW: '___ARROW___',
+  };
+  
+  let highlighted = code
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+  
+  // Comments - use placeholders
+  highlighted = highlighted.replace(
+    /(\/\/.*$|#(?!{).*$)/gm,
+    `<span ${TOKENS.COMMENT}>$1</span>`
+  );
+  
+  // Strings
+  highlighted = highlighted.replace(
+    /(`[\s\S]*?`|"[^"]*"|'[^']*')/g,
+    `<span ${TOKENS.STRING}>$1</span>`
+  );
+  
+  // Keywords (excluding 'class' to avoid breaking HTML attributes)
+  const keywords = /\b(const|let|var|function|async|await|return|if|else|try|catch|finally|throw|new|import|export|from|default|extends|this|super|typeof|instanceof|for|while|def|self|True|False|None|and|or|not|is|with|as|yield|raise|except)\b/g;
+  highlighted = highlighted.replace(
+    keywords,
+    `<span ${TOKENS.KEYWORD}>$1</span>`
+  );
+  
+  // Function calls
+  highlighted = highlighted.replace(
+    /\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g,
+    `<span ${TOKENS.FUNCTION}>$1</span>(`
+  );
+  
+  // Method calls
+  highlighted = highlighted.replace(
+    /\.([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g,
+    `.<span ${TOKENS.FUNCTION}>$1</span>(`
+  );
+  
+  // Numbers
+  highlighted = highlighted.replace(
+    /\b(\d+\.?\d*)\b/g,
+    `<span ${TOKENS.NUMBER}>$1</span>`
+  );
+  
+  // Arrow functions
+  highlighted = highlighted.replace(
+    /=&gt;/g,
+    `<span ${TOKENS.ARROW}>=&gt;</span>`
+  );
+  
+  // Replace tokens with actual class attributes
+  highlighted = highlighted
+    .replace(new RegExp(TOKENS.COMMENT, 'g'), 'class="syntax-comment"')
+    .replace(new RegExp(TOKENS.STRING, 'g'), 'class="syntax-string"')
+    .replace(new RegExp(TOKENS.KEYWORD, 'g'), 'class="syntax-keyword"')
+    .replace(new RegExp(TOKENS.FUNCTION, 'g'), 'class="syntax-function"')
+    .replace(new RegExp(TOKENS.NUMBER, 'g'), 'class="syntax-number"')
+    .replace(new RegExp(TOKENS.ARROW, 'g'), 'class="syntax-arrow"');
+  
+  return highlighted;
+};
+
+/**
  * FileDetailModal - Shows detailed information about a file in the flow
  * Displays file path, description, and context within the flow
  */
@@ -144,6 +225,77 @@ const FileDetailModal = ({ file, node, onClose }) => {
               {file.description || 'No description available for this file.'}
             </p>
           </div>
+
+          {/* Key Function - Core code snippet */}
+          {file.keyFunction && (
+            <div 
+              className="file-modal__section file-modal__section--code"
+              style={{ borderLeftColor: '#5cb3cc' }}
+            >
+              <h3 className="file-modal__section-title">
+                <span className="file-modal__code-icon">⚡</span> Key Function
+              </h3>
+              <pre className="file-modal__code-block">
+                <code 
+                  className="file-modal__code"
+                  dangerouslySetInnerHTML={{ __html: highlightCode(file.keyFunction) }}
+                />
+              </pre>
+            </div>
+          )}
+
+          {/* Connections - How this file ties into the flow */}
+          {file.connectsTo && (
+            <div 
+              className="file-modal__section"
+              style={{ borderLeftColor: '#8b5cf6' }}
+            >
+              <h3 className="file-modal__section-title">
+                <span className="file-modal__connection-icon">→</span> How It Connects
+              </h3>
+              <p className="file-modal__connection-text">
+                {file.connectsTo}
+              </p>
+            </div>
+          )}
+
+          {/* Imports & Dependencies */}
+          {file.imports && file.imports.length > 0 && (
+            <div 
+              className="file-modal__section"
+              style={{ borderLeftColor: '#ec4899' }}
+            >
+              <h3 className="file-modal__section-title">
+                <span className="file-modal__connection-icon">↓</span> Imports
+              </h3>
+              <div className="file-modal__tags">
+                {file.imports.map((imp, index) => (
+                  <span key={index} className="file-modal__tag file-modal__tag--import">
+                    {imp}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Used By */}
+          {file.usedBy && file.usedBy.length > 0 && (
+            <div 
+              className="file-modal__section"
+              style={{ borderLeftColor: '#22c55e' }}
+            >
+              <h3 className="file-modal__section-title">
+                <span className="file-modal__connection-icon">↑</span> Used By
+              </h3>
+              <div className="file-modal__tags">
+                {(Array.isArray(file.usedBy) ? file.usedBy : [file.usedBy]).map((user, index) => (
+                  <span key={index} className="file-modal__tag file-modal__tag--usedby">
+                    {user}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* File Details */}
           <div 
