@@ -7,10 +7,8 @@ import './styles/global.scss';
  * Root application component
  */
 const App = () => {
-  // Check localStorage for persisted state
-  const [showApp, setShowApp] = useState(() => {
-    return localStorage.getItem('fullstack-flow-entered') === 'true';
-  });
+  // Start directly on FullStackFlow
+  const [showApp, setShowApp] = useState(true);
 
   // Persist state to localStorage
   useEffect(() => {
