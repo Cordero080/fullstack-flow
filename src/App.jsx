@@ -7,8 +7,8 @@ import './styles/global.scss';
  * Root application component
  */
 const App = () => {
-  // Start directly on FullStackFlow
-  const [showApp, setShowApp] = useState(true);
+  // Start on landing page
+  const [showApp, setShowApp] = useState(false);
 
   // Persist state to localStorage
   useEffect(() => {
